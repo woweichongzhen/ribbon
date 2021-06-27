@@ -23,9 +23,9 @@ public class PollingServerListUpdater implements ServerListUpdater {
 
     private static final Logger logger = LoggerFactory.getLogger(PollingServerListUpdater.class);
 
-    private static long LISTOFSERVERS_CACHE_UPDATE_DELAY = 1000; // msecs;
-    private static int LISTOFSERVERS_CACHE_REPEAT_INTERVAL = 30 * 1000; // msecs;
-    private static int POOL_SIZE = 2;
+    private static long LISTOFSERVERS_CACHE_UPDATE_DELAY    = 1000; // msecs;
+    private static int  LISTOFSERVERS_CACHE_REPEAT_INTERVAL = 30 * 1000; // msecs;
+    private static int  POOL_SIZE                           = 2;
 
     private static class LazyHolder {
         static ScheduledExecutorService _serverListRefreshExecutor = null;
@@ -42,10 +42,13 @@ public class PollingServerListUpdater implements ServerListUpdater {
         return LazyHolder._serverListRefreshExecutor;
     }
 
-    private final AtomicBoolean isActive = new AtomicBoolean(false);
-    private volatile long lastUpdated = System.currentTimeMillis();
-    private final long initialDelayMs;
-    private final long refreshIntervalMs;
+    /**
+     * 是否激活
+     */
+    private final    AtomicBoolean isActive    = new AtomicBoolean(false);
+    private volatile long          lastUpdated = System.currentTimeMillis();
+    private final    long          initialDelayMs;
+    private final    long          refreshIntervalMs;
 
     private volatile ScheduledFuture<?> scheduledFuture;
 
@@ -65,7 +68,8 @@ public class PollingServerListUpdater implements ServerListUpdater {
     @Override
     public synchronized void start(final UpdateAction updateAction) {
         if (isActive.compareAndSet(false, true)) {
-            final Runnable wrapperRunnable = () ->  {
+            final Runnable wrapperRunnable = () -> {
+                // 如果还没激活，取消上一次的工作，重新执行更新
                 if (!isActive.get()) {
                     if (scheduledFuture != null) {
                         scheduledFuture.cancel(true);
@@ -80,6 +84,7 @@ public class PollingServerListUpdater implements ServerListUpdater {
                 }
             };
 
+            // 定时执行
             scheduledFuture = getRefreshExecutor().scheduleWithFixedDelay(
                     wrapperRunnable,
                     initialDelayMs,

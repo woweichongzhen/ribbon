@@ -17,17 +17,14 @@
  */
 package com.netflix.loadbalancer;
 
-import com.netflix.client.config.IClientConfig;
-
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A loadbalacing strategy that randomly distributes traffic amongst existing
  * servers.
- * 
+ *
  * @author stonse
- * 
  */
 public class RandomRule extends AbstractLoadBalancerRule {
 
@@ -57,6 +54,7 @@ public class RandomRule extends AbstractLoadBalancerRule {
                 return null;
             }
 
+            // 随机选择一台
             int index = chooseRandomInt(serverCount);
             server = upList.get(index);
 
@@ -87,8 +85,8 @@ public class RandomRule extends AbstractLoadBalancerRule {
         return ThreadLocalRandom.current().nextInt(serverCount);
     }
 
-	@Override
-	public Server choose(Object key) {
-		return choose(getLoadBalancer(), key);
-	}
+    @Override
+    public Server choose(Object key) {
+        return this.choose(this.getLoadBalancer(), key);
+    }
 }

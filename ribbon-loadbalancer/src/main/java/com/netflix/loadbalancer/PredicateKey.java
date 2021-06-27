@@ -18,17 +18,17 @@
 package com.netflix.loadbalancer;
 
 /**
+ * 断言key
  * The input object of predicates of class {@link AbstractServerPredicate}.
  * It includes Server and an Object as load balancer key used in {@link IRule#choose(Object)},
- * which might be null. 
- * 
- * @author awang
+ * which might be null.
  *
+ * @author awang
  */
 public class PredicateKey {
-    private Object loadBalancerKey;
-    private Server server;
-    
+    private final Object loadBalancerKey;
+    private final Server server;
+
     public PredicateKey(Object loadBalancerKey, Server server) {
         this.loadBalancerKey = loadBalancerKey;
         this.server = server;
@@ -37,12 +37,12 @@ public class PredicateKey {
     public PredicateKey(Server server) {
         this(null, server);
     }
-    
+
     public final Object getLoadBalancerKey() {
         return loadBalancerKey;
     }
-    
+
     public final Server getServer() {
         return server;
-    }        
+    }
 }

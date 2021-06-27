@@ -47,7 +47,9 @@ public class BestAvailableRule extends ClientConfigEnabledRoundRobinRule {
         Server chosen = null;
         for (Server server: serverList) {
             ServerStats serverStats = loadBalancerStats.getSingleServerStat(server);
+            // 非breaker服务器
             if (!serverStats.isCircuitBreakerTripped(currentTime)) {
+                // 选择并发最低的服务器
                 int concurrentConnections = serverStats.getActiveRequestsCount(currentTime);
                 if (concurrentConnections < minimalConcurrentConnections) {
                     minimalConcurrentConnections = concurrentConnections;

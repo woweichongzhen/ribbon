@@ -30,6 +30,7 @@ public class DummyPing extends AbstractLoadBalancerPing {
     public DummyPing() {
     }
 
+    @Override
     public boolean isAlive(Server server) {
         return true;
     }

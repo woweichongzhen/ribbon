@@ -22,9 +22,8 @@ import com.netflix.util.Pair;
 /**
  * Class that represents a typical Server (or an addressable Node) i.e. a
  * Host:port identifier
- * 
+ *
  * @author stonse
- * 
  */
 public class Server {
 
@@ -57,14 +56,17 @@ public class Server {
         public String getInstanceId();
     }
 
-    public static final String UNKNOWN_ZONE = "UNKNOWN";
-    private String host;
-    private int port = 80;
-    private String scheme;
-    private volatile String id;
-    private volatile boolean isAliveFlag;
-    private String zone = UNKNOWN_ZONE;
-    private volatile boolean readyToServe = true;
+    public static final String  UNKNOWN_ZONE = "UNKNOWN";
+    private             String  host;
+    private             int     port         = 80;
+    private             String  scheme;
+    private volatile    String  id;
+    /**
+     * 服务存活标志
+     */
+    private volatile    boolean isAliveFlag;
+    private             String  zone         = UNKNOWN_ZONE;
+    private volatile    boolean readyToServe = true;
 
     private MetaInfo simpleMetaInfo = new MetaInfo() {
         @Override
@@ -91,7 +93,7 @@ public class Server {
     public Server(String host, int port) {
         this(null, host, port);
     }
-    
+
     public Server(String scheme, String host, int port) {
         this.scheme = scheme;
         this.host = host;
@@ -132,7 +134,7 @@ public class Server {
             return hostPort.first() + ":" + hostPort.second();
         }
     }
-    
+
     private static String getScheme(String id) {
         if (id != null) {
             if (id.toLowerCase().startsWith("http://")) {
@@ -192,7 +194,7 @@ public class Server {
             this.id = null;
         }
     }
-    
+
     public void setSchemea(String scheme) {
         this.scheme = scheme;
     }
@@ -223,7 +225,7 @@ public class Server {
     public int getPort() {
         return port;
     }
-    
+
     public String getScheme() {
         return scheme;
     }
@@ -241,10 +243,8 @@ public class Server {
     }
 
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!(obj instanceof Server))
-            return false;
+        if (this == obj) { return true; }
+        if (!(obj instanceof Server)) { return false; }
         Server svc = (Server) obj;
         return svc.getId().equals(this.getId());
 

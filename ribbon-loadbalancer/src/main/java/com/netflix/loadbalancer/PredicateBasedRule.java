@@ -22,31 +22,28 @@ import com.google.common.base.Optional;
 /**
  * A rule which delegates the server filtering logic to an instance of {@link AbstractServerPredicate}.
  * After filtering, a server is returned from filtered list in a round robin fashion.
- * 
- * 
- * @author awang
  *
+ * @author awang
  */
 public abstract class PredicateBasedRule extends ClientConfigEnabledRoundRobinRule {
-   
+
     /**
      * Method that provides an instance of {@link AbstractServerPredicate} to be used by this class.
-     * 
      */
     public abstract AbstractServerPredicate getPredicate();
-        
+
     /**
      * Get a server by calling {@link AbstractServerPredicate#chooseRandomlyAfterFiltering(java.util.List, Object)}.
      * The performance for this method is O(n) where n is number of servers to be filtered.
      */
     @Override
     public Server choose(Object key) {
-        ILoadBalancer lb = getLoadBalancer();
-        Optional<Server> server = getPredicate().chooseRoundRobinAfterFiltering(lb.getAllServers(), key);
+        ILoadBalancer lb = super.getLoadBalancer();
+        Optional<Server> server = this.getPredicate().chooseRoundRobinAfterFiltering(lb.getAllServers(), key);
         if (server.isPresent()) {
             return server.get();
         } else {
             return null;
-        }       
+        }
     }
 }
